@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../helpers/dbModel');
-const { validateProductsBody, validateSupplierBody } = require('../helpers/middleware');
+const { validateProductsBody, validateSupplierBody, validateBody } = require('../helpers/middleware');
 
 router.get('/suppliers/:id', async(req, res) => {
     try {
@@ -20,7 +20,7 @@ router.get('/suppliers/:id', async(req, res) => {
     }
 });
 
-router.post('/suppliers/:id/products', validateProductsBody, async(req, res) => {
+router.post('/suppliers/:id/products',validateBody, validateProductsBody, async(req, res) => {
     try {
         const { id } = req.params;
         const newProduct = await db.addProduct({ ...req.body, supplierId: id });
@@ -32,7 +32,7 @@ router.post('/suppliers/:id/products', validateProductsBody, async(req, res) => 
     }
 });
 
-router.post('/suppliers', validateSupplierBody, async(req, res) => {
+router.post('/suppliers', validateBody, validateSupplierBody, async(req, res) => {
     try {
         const newSupplier = await db.addSupplier(req.body);
 
